@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+typedef long long ll;
+
+int n, mn, mx;
+vector<int> height, cost;
+
+ll getCost(int x) {
+    ll ret = 0;
+    for (int i = 0; i < n; ++i)
+        ret += cost[i] * abs(height[i] - x);
+    return ret;
+}
+
+ll bs(int lo, int hi) {
+    while (lo != hi) {
+        int mid = lo + (hi - lo) / 2;
+        ll curr = getCost(mid);
+        ll next = getCost(mid + 1);
+        if (curr > next)
+            lo = mid + 1;
+        else
+            hi = mid;
+    }
+    return getCost(lo);
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    int t,tt;
+    cin >> t;
+    while (t--) {
+        mn = INT_MAX, mx = 0;
+        cin >> n;
+        height.clear(), cost.clear();
+        height.resize(n), cost.resize(n);
+        for (int i = 0; i < n; ++i)
+            cin >> height[i], mn = min(mn, height[i]), mx = max(mx, height[i]);
+        for (int i = 0; i < n; ++i)
+            cin >> cost[i];
+        cout << bs(mn, mx) << '\n';
+    }
+
+    return 0;
+}
