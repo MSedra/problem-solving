@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+typedef long long ll;
+
+bool find(int i, vector<ll> &vec) {
+    int lo = 1, hi = vec.size();
+    while (lo <= hi) {
+        int mid = (lo + hi) / 2;
+        if (vec[mid - 1] == vec[i])
+            return true;
+        if (vec[i] < vec[mid - 1])
+            hi = mid - 1;
+        else
+            lo = mid + 1;
+    }
+    return false;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    ll n, m, a, c, x0, xi, ans = 0;
+    cin >> n >> m >> a >> c >> x0;
+    vector<ll> vec;
+    for (int i = 0; i < n; ++i) {
+        xi = (a * x0 + c) % m;
+        vec.push_back(xi);
+        x0 = xi;
+    }
+    for (int i = 0; i < n; ++i)
+        if (find(i, vec))
+            ++ans;
+    cout << ans;
+    return 0;
+}
