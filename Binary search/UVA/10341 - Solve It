@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+typedef long long ll;
+
+int p, q, r, s, t, u;
+
+double fun(double x) {
+    return p * exp(-x) + q * sin(x) + r * cos(x) + s * tan(x) + t * x * x + u;
+}
+
+void bs() {
+    if (fun(0) * fun(1) > 0) {
+        cout << "No solution\n";
+        return;
+    }
+    double lo = 0, hi = 1, eps = 1e-8, flo;
+    flo = fun(0);
+    while (hi - lo > eps) {
+        double mid = lo + (hi - lo) / 2;
+        double fmid = fun(mid);
+        if (flo * fmid <= 0)
+            hi = mid;
+        else
+            lo = mid, flo = fmid;
+    }
+    cout << fixed << setprecision(4) << lo << '\n';
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    string str,sssss;
+    int cnt, val;
+    while (getline(cin, str)) {
+        cnt = 0;
+        istringstream ss(str);
+        while (ss >> val) {
+            if (!cnt)
+                p = val;
+            else if (cnt == 1)
+                q = val;
+            else if (cnt == 2)
+                r = val;
+            else if (cnt == 3)
+                s = val;
+            else if (cnt == 4)
+                t = val;
+            else
+                u = val;
+            ++cnt;
+        }
+        bs();
+    }
+    return 0;
+}
