@@ -1,0 +1,26 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+typedef long long ll;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    int n, d;
+    ll ans = 0;
+    cin >> n >> d;
+    vector<int> vec(n);
+    for (int i = 0; i < n; ++i)
+        cin >> vec[i];
+    for (int i = 0; i < n; ++i) {
+        int ind = upper_bound(vec.begin(), vec.end(), vec[i] + d) - vec.begin() - 1;
+        ll diff = ind - i;
+        if (diff < 2)
+            continue;
+        ans += (diff - 1) * diff / 2;
+    }
+    cout << ans;
+    return 0;
+}
