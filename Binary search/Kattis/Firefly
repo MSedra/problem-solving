@@ -3,15 +3,6 @@
 using namespace std;
 typedef long long ll;
 
-void getDiv(int n, vector<int> &div) {
-    for (int i = 1; i * i <= n; ++i)
-        if (n % i == 0) {
-            div.push_back(i);
-            if (i != n / i)
-                div.push_back(n / i);
-        }
-}
-
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(0);
