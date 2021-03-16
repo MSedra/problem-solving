@@ -1,0 +1,34 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int a1, b1, a2, b2, l1, l2, r1, r2, gun = 0, em = 0;
+    cin >> a1 >> b1 >> a2 >> b2;
+    l1 = a1 + a2;
+    l2 = b1 + b2;
+    vector<int> gunnar(l2 + 5);
+    for (int i = a1; i <= b1; ++i)
+        for (int j = a2; j <= b2; ++j)
+            ++gunnar[i + j];
+    cin >> a1 >> b1 >> a2 >> b2;
+    r1 = a1 + a2;
+    r2 = b1 + b2;;
+    vector<int> emma(r2 + 5);
+    for (int i = a1; i <= b1; ++i)
+        for (int j = a2; j <= b2; ++j)
+            ++emma[i + j];
+    for (int i = l1; i <= l2; ++i)
+        for (int j = r1; j <= r2; ++j) {
+            int pts = gunnar[i] * emma[j];
+            if (i > j)
+                gun += pts;
+            if (j > i)
+                em += pts;
+        }
+    if (gun > em)
+        cout << "Gunnar";
+    else if (em > gun)
+        cout << "Emma";
+    else
+        cout << "Tie";
+}
