@@ -1,0 +1,22 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+double pow(double b, int e) {
+    if (!e)
+        return 1;
+    double ret = pow(b, e >> 1);
+    ret *= ret;
+    return (e & 1 ? ret * b : ret);
+}
+
+int main() {
+    int n, m;
+    double ans = 0, last = 0;
+    cin >> m >> n;
+    for (int i = 1; i <= m; ++i) {
+        double ret = pow((double) i / m, n);
+        ans += i * (ret - last);
+        last = ret;
+    }
+    cout << fixed << setprecision(10) << ans;
+}
