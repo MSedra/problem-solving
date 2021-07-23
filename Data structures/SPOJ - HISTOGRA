@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int mod = 1e9 + 7;
+typedef long long ll;
+
+vector<int> getMon(int n, vector<int> &vec, bool prev) {
+    vector<int> ret(n, -1);
+    stack<pair<int, int>> st;
+    int start = 0, end = n;
+    if (!prev)
+        start = n - 1, end = -1;
+    st.emplace(vec[start], start);
+    for (int i = start; i != end; (end > start ? ++i : --i)) {
+        while (st.size() && st.top().first >= vec[i])
+            st.pop();
+        if (st.size())
+            ret[i] = st.top().second;
+        st.emplace(vec[i], i);
+    }
+    return ret;
+}
+
+int main() {
+    ios_base::sync_with_stdio(0); // remove in interactive problems
+    cin.tie(0);
+
+    int n;
+    while (1) {
+        cin >> n;
+        if (!n)
+            break;
+        vector<int> vec(n);
+        for (int i = 0; i < n; ++i)
+            cin >> vec[i];
+        vector<int> prev = getMon(n, vec, 1);
+        vector<int> nxt = getMon(n, vec, 0);
+        ll ans = 0;
+        for (int i = 0; i < n; ++i) {
+            int st = -1, en = n;
+            if (prev[i] != -1)
+                st = prev[i];
+            if (nxt[i] != -1)
+                en = nxt[i];
+            ++st, --en;
+            ans = max(ans, (ll) (en - st + 1) * vec[i]);
+        }
+        cout << ans << '\n';
+    }
+}
