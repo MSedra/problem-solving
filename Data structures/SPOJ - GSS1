@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int N = 1 << 17;
+
+typedef long long ll;
+
+int tree[N << 1][4], arr[N], n;
+
+vector<int> combine(vector<int> larr, vector<int> rarr) {
+    vector<int> ret;
+    int mx = max(larr[0], rarr[0]);
+    mx = max(mx, larr[2] + rarr[1]);
+    ret.push_back(mx);
+    ret.push_back(max(larr[1], larr[3] + rarr[1]));
+    ret.push_back(max(rarr[2], rarr[3] + larr[2]));
+    ret.push_back(larr[3] + rarr[3]);
+    return ret;
+}
+
+void init(int ni = 0, int ns = 0, int ne = n - 1) {
+    if (ns == ne) {
+        for (int i = 0; i < 4; ++i)
+            tree[ni][i] = arr[ns];
+        return;
+    }
+    int lf = ni * 2 + 1, rt = lf + 1, mid = ns + (ne - ns) / 2;
+    init(lf, ns, mid);
+    init(rt, mid + 1, ne);
+    vector<int> lft, rgt;
+    for (int i = 0; i < 4; ++i)
+        lft.push_back(tree[lf][i]), rgt.push_back(tree[rt][i]);
+    vector<int> res = combine(lft, rgt);
+    for (int i = 0; i < 4; ++i)
+        tree[ni][i] = res[i];
+}
+
+vector<int> query(int qs, int qe, int ni = 0, int ns = 0, int ne = n - 1) {
+    if (qs > ne || qe < ns)
+        return {-1};
+    if (ns >= qs && ne <= qe) {
+        vector<int> res;
+        for (int i = 0; i < 4; ++i)
+            res.push_back(tree[ni][i]);
+        return res;
+    }
+    int lf = ni * 2 + 1, rt = lf + 1, mid = ns + (ne - ns) / 2;
+    vector<int> lft = query(qs, qe, lf, ns, mid);
+    vector<int> rgt = query(qs, qe, rt, mid + 1, ne);
+    if (lft.size() == 1)
+        return rgt;
+    if (rgt.size() == 1)
+        return lft;
+    return combine(lft, rgt);
+}
+
+int main() {
+    ios_base::sync_with_stdio(0); // remove in interactive problems
+    cin.tie(0);
+
+    int m;
+    cin >> n;
+    for (int i = 0; i < n; ++i)
+        cin >> arr[i];
+    init();
+    cin >> m;
+    while (m--) {
+        int l, r;
+        cin >> l >> r;
+        cout << query(--l, --r)[0] << '\n';
+    }
+}
