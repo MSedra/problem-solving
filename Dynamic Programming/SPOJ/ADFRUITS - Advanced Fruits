@@ -1,0 +1,56 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+string str1, str2, lcs, ans;
+int dp[150][150];
+
+void build() {
+    for (int i = 1; i <= str1.size(); ++i)
+        for (int j = 1; j <= str2.size(); ++j)
+            if (str1[i - 1] == str2[j - 1])
+                dp[i][j] = 1 + dp[i - 1][j - 1];
+            else
+                dp[i][j] = max(dp[i][j - 1], dp[i - 1][j]);
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    while (cin >> str1) {
+        cin >> str2;
+        memset(dp,0,sizeof(dp));
+        build();
+        lcs = ans = "";
+        int i = str1.size(), j = str2.size();
+        while (i && j) {
+            if (str1[i - 1] == str2[j - 1])
+                lcs += str1[i - 1], --i, --j;
+            else {
+                if (dp[i - 1][j] > dp[i][j - 1])
+                    --i;
+                else
+                    --j;
+            }
+        }
+        reverse(lcs.begin(), lcs.end());
+        i = j = 0;
+        int li = 0, lj = 0;
+        for (auto c : lcs) {
+            while (str1[i] != c)
+                ++i;
+            while (str2[j] != c)
+                ++j;
+            ans += str1.substr(li, i - li);
+            ans += str2.substr(lj, j - lj);
+            ans += c;
+            li = ++i;
+            lj = ++j;
+        }
+        ans += str1.substr(li, str1.size() - li);
+        ans += str2.substr(lj, str2.size() - lj);
+        cout << ans << '\n';
+    }
+    return 0;
+}
