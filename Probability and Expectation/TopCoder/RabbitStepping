@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef long long ll;
+
+const int mod = 1e9 + 7;
+
+int get(int n,int mask){
+    int even=0,odd=0;
+    for(int i=0  ;i<n ; ++i)
+        if(mask&(1<<i))
+            even+=(i%2==0),odd+=(i&1);
+    return even%2+odd%2;
+}
+
+class RabbitStepping {
+public:
+    double getExpected(string field, int r) {
+        int n=field.size(),tot=0,sz=0;
+        for(int i=0 ; i<(1<<n) ; ++i) {
+            if(__builtin_popcount(i)!=r)
+                continue;
+            ++sz;
+            tot += get(n, i);
+        }
+        cout << fixed << setprecision(10);
+        return 1.0*tot/sz;
+    }
+};
