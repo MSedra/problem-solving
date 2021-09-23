@@ -1,0 +1,52 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+int n;
+int dp[1050][25][85];
+vector<vector<int>> vec;
+
+int solve(int i, int ox, int ni) {
+    int &ret = dp[i][ox][ni];
+    if (ret != -1)
+        return ret;
+    if (!ox && !ni)
+        return 0;
+    if (i == n)
+        return (ox || ni ? INT_MAX : 0);
+    ret = solve(i + 1, ox, ni);
+    int nox = max(0, ox - vec[i][0]);
+    int nni = max(0, ni - vec[i][1]);
+    int res = solve(i + 1, nox, nni);
+    if (res != INT_MAX)
+        ret = min(ret, vec[i][2] + res);
+    return ret;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    string str;
+    bool in = false;
+    int t, ox, ni;
+    cin >> t;
+    while (t--) {
+        if (in)
+            getline(cin, str);
+        in = true;
+        cin >> ox >> ni >> n;
+        vec.clear();
+        vec.resize(n + 5, vector<int>(5));
+        for (int i = 0; i < n; ++i)
+            for (int j = 0; j < 3; ++j)
+                cin >> vec[i][j];
+        for (int i = 0; i <= n; ++i)
+            for (int j = 0; j < 23; ++j)
+                for (int k = 0; k < 82; ++k)
+                    dp[i][j][k] = -1;
+        cout << solve(0, ox, ni) << '\n';
+    }
+    return 0;
+}
