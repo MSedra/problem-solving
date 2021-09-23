@@ -1,0 +1,53 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class AvoidRoads
+{
+public:
+    map<pair<pair<int,int>,pair<int,int>>,bool> no;
+    vector<vector<long long>> dp;
+
+    void tokenize(string str, vector<int> &coord)
+    {
+        int i=0,t=4,b=0;
+        while(t--)
+        {
+            while(str[i]!=' ')
+                ++i;
+            coord.push_back(stoi(str.substr(b,i-b)));
+            ++i;
+            b=i;
+        }
+    }
+
+    long long numWays(int x, int y, int width, int height)
+    {
+        if(dp[x][y])
+            return dp[x][y];
+        if(x==width && y==height)
+            return 1;
+        long long w1=0,w2=0;
+        if(y!=height && !no[{{x,y},{x,y+1}}])
+            w1=numWays(x,y+1,width,height);
+        if(x!=width && !no[{{x,y},{x+1,y}}])
+            w2=numWays(x+1,y,width,height);
+        return dp[x][y]=w1+w2;
+    }
+    long long numWays(int width, int height, vector<string> bad)
+    {
+        int x1,x2,y1,y2;
+        dp.resize(width+5,vector<long long>(height+5));
+        for(auto str : bad)
+        {
+            vector<int> coord;
+            tokenize(str,coord);
+            x1=coord[0],y1=coord[1],x2=coord[2],y2=coord[3];
+            if(x1>x2)
+                swap(x1,x2);
+            if(y1>y2)
+                swap(y1,y2);
+            no[{{x1,y1},{x2,y2}}]=true;
+        }
+        return numWays(0,0,width,height);
+    }
+};
