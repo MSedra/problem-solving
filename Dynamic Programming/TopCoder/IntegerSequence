@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class IntegerSequence
+{
+public:
+    int maxSubsequence(vector<int> numbers)
+    {
+        int n = numbers.size(), longest = -1;
+        vector<int> lisLeft(n, 1), lisRight(n, 1);
+        for (int i = 0; i < n; ++i)
+            for (int j = 0; j < i; ++j)
+                if (numbers[i] > numbers[j])
+                    lisLeft[i] = max(lisLeft[i], lisLeft[j] + 1);
+        for (int i = n - 1; i > -1; --i)
+            for (int j = n - 1; j > i; --j)
+                if (numbers[i] > numbers[j])
+                    lisRight[i] = max(lisRight[i], lisRight[j] + 1);
+        for (int i = 0; i < n; ++i)
+            longest = max(ans, lisLeft[i] + lisRight[i] - 1);
+        return n - longest;
+    }
+};
