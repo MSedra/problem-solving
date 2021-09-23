@@ -1,0 +1,31 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+typedef long long ll;
+
+int dp[5050][5050];
+int solve(string &str, int i, int j) {
+    int &ret = dp[i][j];
+    if (ret != -1)
+        return ret;
+    if (i > j)
+        return 0;
+    if (str[i] == str[j])
+        ret = solve(str, i + 1, j - 1);
+    else
+        ret = 1 + min(solve(str, i + 1, j), solve(str, i, j - 1));
+    return ret;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    int n;
+    string str;
+    cin >> n >> str;
+    memset(dp, -1, sizeof(dp));
+    cout << solve(str, 0, n - 1);
+}
