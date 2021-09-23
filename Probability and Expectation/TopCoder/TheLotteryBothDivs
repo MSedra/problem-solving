@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef long long ll;
+
+const int mod = 1e9 + 7;
+
+
+struct cmp {
+    bool operator()( const string &s1,const  string &s2) {
+        return s1.size()<s2.size();
+    }
+};
+
+class TheLotteryBothDivs {
+public:
+    double find(vector<string> suff) {
+        double ret = 0;
+        vector<double> poww(12);
+        poww[0]=1;
+        for(int i=1 ; i<10 ; ++i)
+            poww[i]=poww[i-1]*1.0/10;
+        sort(suff.begin(), suff.end(), cmp());
+        map<string, bool> done;
+        for (auto sf : suff) {
+            reverse(sf.begin(),sf.end());
+            bool en = 0;
+            for (int i = 0; i < sf.size(); ++i)
+                if (done[sf.substr(0, i + 1)]) {
+                    en = 1;
+                    break;
+                }
+            if (en)
+                continue;
+            ret += poww[sf.size()];
+            done[sf] = 1;
+        }
+        cout << fixed << setprecision(10);
+        return ret;
+    }
+};
