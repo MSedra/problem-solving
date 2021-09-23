@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class element
+{
+public:
+    int cost, features, fixedTime;
+    element(int cost, int features, int fixedTime)
+    {
+        this->cost = cost;
+        this->features = features;
+        this->fixedTime = fixedTime;
+    }
+};
+
+bool cmp(element e1, element e2)
+{
+    return e1.cost < e2.cost;
+}
+
+class AutoMarket
+{
+public:
+    int maxSet(vector<int> cost, vector<int> features, vector<int> fixTimes)
+    {
+        int n = cost.size();
+        vector<element> vec;
+        for (int i = 0; i < n; ++i)
+            vec.push_back(element(cost[i], features[i], fixTimes[i]));
+        sort(vec.begin(), vec.end(), cmp);
+        vector<int> dp(n, 1);
+        for (int i = 0; i < n; ++i)
+            for (int j = 0; j < i; ++j)
+                if (vec[i].cost > vec[j].cost && vec[i].fixedTime > vec[j].fixedTime && vec[i].features < vec[j].features)
+                    dp[i] = max(dp[i], dp[j] + 1);
+        return *max_element(dp.begin(), dp.end());
+    }
+};
