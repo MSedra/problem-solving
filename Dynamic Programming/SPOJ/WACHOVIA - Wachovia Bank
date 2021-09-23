@@ -1,0 +1,41 @@
+#include <bits/extc++.h>
+
+using namespace std;
+
+typedef long long ll;
+
+int n, k;
+int dp[55][1050];
+vector<vector<int>> vec;
+
+int solve(int i, int left) {
+    int &ret = dp[i][left];
+    if (ret != -1)
+        return ret;
+    if (!left || i == n)
+        return 0;
+    ret = solve(i + 1, left);
+    if (vec[i][0] <= left)
+        ret = max(ret, vec[i][1] + solve(i + 1, left - vec[i][0]));
+    return ret;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie();
+    cout.tie();
+
+    int t;
+    cin >> t;
+    while (t--) {
+        cin >> k >> n;
+        vec.clear();
+        vec.resize(n + 5, vector<int>(5));
+        for (int i = 0; i < n; ++i)
+            for (int j = 0; j < 2; ++j)
+                cin >> vec[i][j];
+        memset(dp, -1, sizeof(dp));
+        cout << "Hey stupid robber, you can get " << solve(0, k) << ".\n";
+    }
+    return 0;
+}
